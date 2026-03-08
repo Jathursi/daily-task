@@ -25,7 +25,12 @@ const navItems = [
   { href: '/focus', label: 'Focus Timer', icon: Timer },
 ];
 
-export default function Sidebar() {
+interface SidebarProps {
+  isMobileOpen?: boolean;
+  onClose?: () => void;
+}
+
+export default function Sidebar({ isMobileOpen = false, onClose }: SidebarProps) {
   const pathname = usePathname();
   const userId = useAppStore((state) => state.userId);
   const initUserId = useAppStore((state) => state.initUserId);
@@ -34,8 +39,14 @@ export default function Sidebar() {
     initUserId();
   }, [initUserId]);
 
+  useEffect(() => {
+    if (onClose) {
+      onClose();
+    }
+  }, [pathname, onClose]);
+
   return (
-    <aside className="fixed left-0 top-0 h-screen w-[280px] bg-primary-dark border-r border-accent-light/10 flex flex-col z-50">
+    <aside className={`fixed left-0 top-0 h-screen w-[85vw] max-w-[300px] lg:w-[280px] bg-primary-dark border-r border-accent-light/10 flex flex-col z-50 transition-transform duration-300 ease-in-out ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}>
       <div className="p-6 border-b border-accent-light/10">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-orange to-accent-red flex items-center justify-center">
@@ -55,6 +66,7 @@ export default function Sidebar() {
             <Link
               key={item.href}
               href={item.href}
+              onClick={onClose}
               className={`sidebar-link ${isActive ? 'active' : ''}`}
             >
               <item.icon className="w-5 h-5" />

@@ -128,15 +128,15 @@ export default function CalendarView({ onSelectDate }: CalendarViewProps) {
   }
 
   return (
-    <div className="glass-card p-6">
-      <div className="flex items-center justify-between mb-6">
+    <div className="glass-card p-4 sm:p-6">
+      <div className="flex items-center justify-between mb-4 sm:mb-6">
         <button
           onClick={() => changeMonth(-1)}
           className="p-2 rounded-lg hover:bg-accent-light/10 transition-colors"
         >
           <ChevronLeft className="w-5 h-5 text-accent-light" />
         </button>
-        <h3 className="text-xl font-semibold text-white">
+        <h3 className="text-base sm:text-xl font-semibold text-white text-center px-2">
           {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
         </h3>
         <button
@@ -147,18 +147,18 @@ export default function CalendarView({ onSelectDate }: CalendarViewProps) {
         </button>
       </div>
 
-      <div className="grid grid-cols-7 gap-2 mb-2">
+      <div className="grid grid-cols-7 gap-1.5 sm:gap-2 mb-1.5 sm:mb-2">
         {weekDays.map((day) => (
-          <div key={day} className="text-center text-sm font-medium text-accent-light/60 py-2">
+          <div key={day} className="text-center text-[11px] sm:text-sm font-medium text-accent-light/60 py-1.5 sm:py-2">
             {day}
           </div>
         ))}
       </div>
 
-      <div className="grid grid-cols-7 gap-2">
+      <div className="grid grid-cols-7 gap-1.5 sm:gap-2">
         {days.map((day, index) => {
           if (!day) {
-            return <div key={`empty-${index}`} className="h-20" />;
+            return <div key={`empty-${index}`} className="h-14 sm:h-20" />;
           }
           
           const dayData = getDayData(day);
@@ -171,23 +171,23 @@ export default function CalendarView({ onSelectDate }: CalendarViewProps) {
             <button
               key={day}
               onClick={() => onSelectDate(dateStr)}
-              className={`h-20 rounded-xl transition-all flex flex-col items-center justify-center gap-1 ${
+              className={`h-14 sm:h-20 rounded-xl transition-all flex flex-col items-center justify-center gap-0.5 sm:gap-1 ${
                 isToday 
                   ? 'ring-2 ring-accent-orange' 
                   : ''
               } ${dayTasks.length > 0 ? getHeatmapColor(dayData?.productivityScore, dayTasks, dateStr) : dayData ? getHeatmapColor(dayData.productivityScore, [], dateStr) : 'bg-primary-dark/30 hover:bg-secondary'}`}
             >
-              <span className={`text-sm font-medium ${dayData || dayTasks.length > 0 ? 'text-white' : 'text-accent-light/60'}`}>
+              <span className={`text-xs sm:text-sm font-medium ${dayData || dayTasks.length > 0 ? 'text-white' : 'text-accent-light/60'}`}>
                 {day}
               </span>
               {taskIndicator && (
                 <div className="flex items-center gap-1">
                   {taskIndicator}
-                  <span className="text-xs text-accent-light/80">{dayTasks.length}</span>
+                  <span className="text-[10px] sm:text-xs text-accent-light/80">{dayTasks.length}</span>
                 </div>
               )}
               {dayData && !taskIndicator && (
-                <span className="text-xs text-accent-light/80">
+                <span className="text-[10px] sm:text-xs text-accent-light/80">
                   {dayData.productivityScore}/10
                 </span>
               )}
@@ -196,26 +196,26 @@ export default function CalendarView({ onSelectDate }: CalendarViewProps) {
         })}
       </div>
 
-      <div className="mt-6 flex items-center justify-center gap-4 flex-wrap">
+      <div className="mt-4 sm:mt-6 flex items-center justify-center gap-2 sm:gap-4 flex-wrap">
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 rounded bg-green-500/40 border border-green-500/50" />
-          <span className="text-xs text-accent-light/60">Completed</span>
+          <span className="text-[11px] sm:text-xs text-accent-light/60">Completed</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 rounded bg-yellow-500/40 border border-yellow-500/50" />
-          <span className="text-xs text-accent-light/60">Planned</span>
+          <span className="text-[11px] sm:text-xs text-accent-light/60">Planned</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 rounded bg-red-500/40 border border-red-500/50" />
-          <span className="text-xs text-accent-light/60">Overdue</span>
+          <span className="text-[11px] sm:text-xs text-accent-light/60">Overdue</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 rounded bg-accent-light/20" />
-          <span className="text-xs text-accent-light/60">Low</span>
+          <span className="text-[11px] sm:text-xs text-accent-light/60">Low</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 rounded bg-accent-red" />
-          <span className="text-xs text-accent-light/60">High</span>
+          <span className="text-[11px] sm:text-xs text-accent-light/60">High</span>
         </div>
       </div>
     </div>

@@ -65,9 +65,9 @@ export default function TaskPlanner({ userId, onSave, editingTask, onCancelEdit 
   };
 
   return (
-    <div className="glass-card p-6">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-white">
+    <div className="glass-card p-4 sm:p-6">
+      <div className="flex items-center justify-between mb-3 sm:mb-4">
+        <h3 className="text-base sm:text-lg font-semibold text-white">
           {editingTask ? 'Edit Task' : 'Plan New Task'}
         </h3>
         {editingTask && onCancelEdit && (
@@ -80,9 +80,9 @@ export default function TaskPlanner({ userId, onSave, editingTask, onCancelEdit 
         )}
       </div>
       
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
         <div>
-          <label className="block text-sm text-accent-light/60 mb-2">Task Title</label>
+          <label className="block text-xs sm:text-sm text-accent-light/60 mb-1.5 sm:mb-2">Task Title</label>
           <input
             type="text"
             value={formData.title}
@@ -94,7 +94,7 @@ export default function TaskPlanner({ userId, onSave, editingTask, onCancelEdit 
         </div>
         
         <div>
-          <label className="block text-sm text-accent-light/60 mb-2">Description (optional)</label>
+          <label className="block text-xs sm:text-sm text-accent-light/60 mb-1.5 sm:mb-2">Description (optional)</label>
           <textarea
             value={formData.description}
             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
@@ -103,9 +103,9 @@ export default function TaskPlanner({ userId, onSave, editingTask, onCancelEdit 
           />
         </div>
         
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4">
           <div>
-            <label className="block text-sm text-accent-light/60 mb-2">Category</label>
+            <label className="block text-xs sm:text-sm text-accent-light/60 mb-1.5 sm:mb-2">Category</label>
             <select
               value={formData.category}
               onChange={(e) => setFormData({ ...formData, category: e.target.value as typeof formData.category })}
@@ -118,7 +118,7 @@ export default function TaskPlanner({ userId, onSave, editingTask, onCancelEdit 
           </div>
           
           <div>
-            <label className="block text-sm text-accent-light/60 mb-2">Planned Hours</label>
+            <label className="block text-xs sm:text-sm text-accent-light/60 mb-1.5 sm:mb-2">Planned Hours</label>
             <input
               type="number"
               min="0.5"
@@ -131,9 +131,9 @@ export default function TaskPlanner({ userId, onSave, editingTask, onCancelEdit 
           </div>
         </div>
         
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4">
           <div>
-            <label className="block text-sm text-accent-light/60 mb-2">Date</label>
+            <label className="block text-xs sm:text-sm text-accent-light/60 mb-1.5 sm:mb-2">Date</label>
             <input
               type="date"
               value={formData.plannedDate}
@@ -144,7 +144,7 @@ export default function TaskPlanner({ userId, onSave, editingTask, onCancelEdit 
           </div>
           
           <div>
-            <label className="block text-sm text-accent-light/60 mb-2">Time (optional)</label>
+            <label className="block text-xs sm:text-sm text-accent-light/60 mb-1.5 sm:mb-2">Time (optional)</label>
             <input
               type="time"
               value={formData.plannedTime || ''}
@@ -156,7 +156,7 @@ export default function TaskPlanner({ userId, onSave, editingTask, onCancelEdit 
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm text-accent-light/60 mb-2">Priority</label>
+            <label className="block text-xs sm:text-sm text-accent-light/60 mb-1.5 sm:mb-2">Priority</label>
             <select
               value={formData.priority}
               onChange={(e) => setFormData({ ...formData, priority: e.target.value as typeof formData.priority })}
@@ -170,18 +170,18 @@ export default function TaskPlanner({ userId, onSave, editingTask, onCancelEdit 
         </div>
 
         {!editingTask && (
-          <div className="p-4 rounded-xl bg-secondary/30 border border-accent-light/10">
+          <div className="p-3 sm:p-4 rounded-xl bg-secondary/30 border border-accent-light/10">
             <div className="flex items-center gap-2 mb-3">
               <Repeat className="w-4 h-4 text-accent-orange" />
-              <span className="text-sm font-medium text-white">Repeat</span>
+              <span className="text-xs sm:text-sm font-medium text-white">Repeat</span>
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 flex-wrap">
               {[1, 2, 3, 4, 5, 7].map((days) => (
                 <button
                   key={days}
                   type="button"
                   onClick={() => setRepeatDays(days)}
-                  className={`px-3 py-1.5 rounded-lg text-sm transition-all ${
+                  className={`px-2.5 sm:px-3 py-1.5 rounded-lg text-xs sm:text-sm transition-all ${
                     repeatDays === days
                       ? 'bg-accent-orange text-white'
                       : 'bg-primary-dark/50 text-accent-light hover:bg-secondary'
@@ -202,7 +202,7 @@ export default function TaskPlanner({ userId, onSave, editingTask, onCancelEdit 
         <button
           type="submit"
           disabled={isSaving || !formData.title.trim()}
-          className="btn-primary w-full flex items-center justify-center gap-2"
+          className="btn-primary w-full flex items-center justify-center gap-2 text-sm sm:text-base"
         >
           {isSaving ? (
             <Loader2 className="w-5 h-5 animate-spin" />

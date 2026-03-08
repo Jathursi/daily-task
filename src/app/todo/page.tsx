@@ -96,20 +96,20 @@ export default function TodoPage() {
   }
 
   return (
-    <div className="space-y-8 animate-fadeIn">
-      <div className="flex items-center justify-between">
+    <div className="space-y-5 sm:space-y-8 animate-fadeIn">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-white mb-2">Tasks & Planning</h1>
-          <p className="text-accent-light/60">Plan and track your daily tasks</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-white mb-1.5 sm:mb-2">Tasks & Planning</h1>
+          <p className="text-sm sm:text-base text-accent-light/60">Plan and track your daily tasks</p>
         </div>
         <button
           onClick={() => {
             setEditingTask(null);
             setShowPlanner(true);
           }}
-          className="btn-primary flex items-center gap-2"
+          className="btn-primary flex items-center justify-center gap-2 w-full sm:w-auto text-sm sm:text-base"
         >
-          <Plus className="w-5 h-5" />
+          <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
           Add Task
         </button>
       </div>
@@ -123,12 +123,12 @@ export default function TodoPage() {
       <OverdueTaskAlert tasks={overdueTasks} />
 
       <div className="flex items-center gap-2 overflow-x-auto pb-2">
-        <Filter className="w-5 h-5 text-accent-light/60 flex-shrink-0" />
+        <Filter className="w-4 h-4 sm:w-5 sm:h-5 text-accent-light/60 flex-shrink-0" />
         {categories.map((cat) => (
           <button
             key={cat}
             onClick={() => setFilterCategory(cat)}
-            className={`px-4 py-2 rounded-lg text-sm whitespace-nowrap transition-all ${
+            className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm whitespace-nowrap transition-all ${
               filterCategory === cat
                 ? 'bg-accent-orange text-white'
                 : 'bg-secondary/50 text-accent-light hover:bg-secondary'
@@ -139,7 +139,7 @@ export default function TodoPage() {
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         <TaskList
           title="Today's Tasks"
           tasks={filterTasks(todaysTasks)}

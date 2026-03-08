@@ -45,17 +45,17 @@ export default function TaskCard({ task, onToggleComplete, onEdit, onDelete, isO
   };
 
   return (
-    <div className={`glass-card p-4 transition-all ${isOverdue ? 'border-red-500/50 bg-red-500/5' : ''}`}>
-      <div className="flex items-start gap-3">
+    <div className={`glass-card p-3 sm:p-4 transition-all overflow-hidden ${isOverdue ? 'border-red-500/50 bg-red-500/5' : ''}`}>
+      <div className="flex items-start gap-2.5 sm:gap-3">
         <button
           onClick={() => onToggleComplete(task)}
-          className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 transition-all ${
+          className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 transition-all ${
             task.completed
               ? 'bg-accent-orange border-accent-orange'
               : 'border-accent-light/30 hover:border-accent-orange'
           }`}
         >
-          {task.completed && <Check className="w-4 h-4 text-white" />}
+          {task.completed && <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />}
         </button>
         
         <div className="flex-1 min-w-0">
@@ -68,15 +68,15 @@ export default function TaskCard({ task, onToggleComplete, onEdit, onDelete, isO
             </div>
           </div>
           
-          <h4 className={`font-medium text-white ${task.completed ? 'line-through opacity-50' : ''}`}>
+          <h4 className={`text-sm sm:text-base font-medium text-white ${task.completed ? 'line-through opacity-50' : ''}`}>
             {task.title}
           </h4>
           
           {task.description && (
-            <p className="text-sm text-accent-light/60 mt-1 line-clamp-2">{task.description}</p>
+            <p className="text-xs sm:text-sm text-accent-light/60 mt-1 line-clamp-2">{task.description}</p>
           )}
           
-          <div className="flex items-center gap-3 mt-2 text-xs text-accent-light/60">
+          <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 mt-2 text-[11px] sm:text-xs text-accent-light/60">
             {showDate && (
               <span className={isOverdue ? 'text-red-400' : isToday ? 'text-accent-orange' : ''}>
                 {isToday ? 'Today' : formatDate(task.plannedDate)}
@@ -95,18 +95,18 @@ export default function TaskCard({ task, onToggleComplete, onEdit, onDelete, isO
           </div>
         </div>
         
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-0.5 sm:gap-1 flex-shrink-0">
           <button
             onClick={() => onEdit(task)}
-            className="p-2 rounded-lg hover:bg-accent-light/10 transition-colors"
+            className="p-1.5 sm:p-2 rounded-lg hover:bg-accent-light/10 transition-colors"
           >
-            <Edit2 className="w-4 h-4 text-accent-light" />
+            <Edit2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-accent-light" />
           </button>
           <button
             onClick={() => onDelete(task.id!)}
-            className="p-2 rounded-lg hover:bg-red-500/20 transition-colors"
+            className="p-1.5 sm:p-2 rounded-lg hover:bg-red-500/20 transition-colors"
           >
-            <Trash2 className="w-4 h-4 text-red-400" />
+            <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-red-400" />
           </button>
         </div>
       </div>

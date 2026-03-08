@@ -31,9 +31,11 @@ body {
   backdrop-filter: blur(10px);
 }
 
-.glass-card:hover {
-  transform: scale(1.02);
-  transition: all 0.2s ease;
+@media (hover: hover) and (pointer: fine) {
+  .glass-card:hover {
+    transform: scale(1.02);
+    transition: all 0.2s ease;
+  }
 }
 
 .input-field {

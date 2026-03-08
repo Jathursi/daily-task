@@ -33,16 +33,16 @@ export default function MetricCard({ title, value, unit, icon, color }: MetricCa
   const gradientClass = colorMap[color as keyof typeof colorMap] || colorMap.productivity;
 
   return (
-    <div className="glass-card p-6 animate-fadeIn">
-      <div className="flex items-start justify-between mb-4">
-        <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${gradientClass} flex items-center justify-center`}>
-          <Icon className="w-6 h-6 text-white" />
+    <div className="glass-card p-4 sm:p-6 animate-fadeIn">
+      <div className="flex items-start justify-between mb-3 sm:mb-4">
+        <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br ${gradientClass} flex items-center justify-center`}>
+          <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
         </div>
       </div>
-      <p className="text-sm text-accent-light/60 mb-1">{title}</p>
-      <div className="flex items-baseline gap-2">
-        <span className="text-3xl font-bold text-white">{value}</span>
-        <span className="text-sm text-accent-light/60">{unit}</span>
+      <p className="text-xs sm:text-sm text-accent-light/60 mb-1">{title}</p>
+      <div className="flex items-baseline gap-1.5 sm:gap-2">
+        <span className="text-2xl sm:text-3xl font-bold text-white">{value}</span>
+        <span className="text-xs sm:text-sm text-accent-light/60">{unit}</span>
       </div>
     </div>
   );

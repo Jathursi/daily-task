@@ -8,9 +8,9 @@ interface ProductivityChartProps {
 
 export default function ProductivityChart({ data }: ProductivityChartProps) {
   return (
-    <div className="glass-card p-6">
-      <h3 className="text-lg font-semibold text-white mb-4">Weekly Productivity</h3>
-      <div className="h-[200px]">
+    <div className="glass-card p-4 sm:p-6">
+      <h3 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4">Weekly Productivity</h3>
+      <div className="h-[170px] sm:h-[200px]">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={data}>
             <defs>
@@ -23,11 +23,11 @@ export default function ProductivityChart({ data }: ProductivityChartProps) {
             <XAxis 
               dataKey="day" 
               stroke="rgba(233, 188, 185, 0.5)"
-              fontSize={12}
+              fontSize={10}
             />
             <YAxis 
               stroke="rgba(233, 188, 185, 0.5)"
-              fontSize={12}
+              fontSize={10}
               domain={[0, 10]}
             />
             <Tooltip

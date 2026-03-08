@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import Sidebar from "@/components/Sidebar";
-import RealtimeAlertSystem from "@/components/RealtimeAlertSystem";
+import AppShell from "@/components/AppShell";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -30,13 +29,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className="flex min-h-screen">
-          <Sidebar />
-          <RealtimeAlertSystem />
-          <main className="flex-1 ml-[280px] p-8">
-            {children}
-          </main>
-        </div>
+        <AppShell>{children}</AppShell>
       </body>
     </html>
   );

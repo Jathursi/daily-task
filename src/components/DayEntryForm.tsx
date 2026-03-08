@@ -102,7 +102,7 @@ export default function DayEntryForm({ selectedDate, onDateChange, onSave }: Day
   }
 
   return (
-    <div className="glass-card p-6 space-y-6">
+    <div className="glass-card p-4 sm:p-6 space-y-5 sm:space-y-6">
       <div className="flex items-center justify-between">
         <button
           onClick={() => changeDate(-1)}
@@ -110,7 +110,7 @@ export default function DayEntryForm({ selectedDate, onDateChange, onSave }: Day
         >
           <ChevronLeft className="w-5 h-5 text-accent-light" />
         </button>
-        <h3 className="text-lg font-semibold text-white">{formatDate(selectedDate)}</h3>
+        <h3 className="text-base sm:text-lg font-semibold text-white text-center px-2">{formatDate(selectedDate)}</h3>
         <button
           onClick={() => changeDate(1)}
           className="p-2 rounded-lg hover:bg-accent-light/10 transition-colors"
@@ -119,9 +119,9 @@ export default function DayEntryForm({ selectedDate, onDateChange, onSave }: Day
         </button>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
         <div>
-          <label className="block text-sm text-accent-light/60 mb-2">Study Hours</label>
+          <label className="block text-xs sm:text-sm text-accent-light/60 mb-1.5 sm:mb-2">Study Hours</label>
           <input
             type="number"
             min="0"
@@ -134,7 +134,7 @@ export default function DayEntryForm({ selectedDate, onDateChange, onSave }: Day
           />
         </div>
         <div>
-          <label className="block text-sm text-accent-light/60 mb-2">Work Hours</label>
+          <label className="block text-xs sm:text-sm text-accent-light/60 mb-1.5 sm:mb-2">Work Hours</label>
           <input
             type="number"
             min="0"
@@ -147,7 +147,7 @@ export default function DayEntryForm({ selectedDate, onDateChange, onSave }: Day
           />
         </div>
         <div>
-          <label className="block text-sm text-accent-light/60 mb-2">Coding Hours</label>
+          <label className="block text-xs sm:text-sm text-accent-light/60 mb-1.5 sm:mb-2">Coding Hours</label>
           <input
             type="number"
             min="0"
@@ -160,7 +160,7 @@ export default function DayEntryForm({ selectedDate, onDateChange, onSave }: Day
           />
         </div>
         <div>
-          <label className="block text-sm text-accent-light/60 mb-2">Sleep Hours</label>
+          <label className="block text-xs sm:text-sm text-accent-light/60 mb-1.5 sm:mb-2">Sleep Hours</label>
           <input
             type="number"
             min="0"
@@ -173,7 +173,7 @@ export default function DayEntryForm({ selectedDate, onDateChange, onSave }: Day
           />
         </div>
         <div>
-          <label className="block text-sm text-accent-light/60 mb-2">Exercise (min)</label>
+          <label className="block text-xs sm:text-sm text-accent-light/60 mb-1.5 sm:mb-2">Exercise (min)</label>
           <input
             type="number"
             min="0"
@@ -188,13 +188,13 @@ export default function DayEntryForm({ selectedDate, onDateChange, onSave }: Day
       </div>
 
       <div>
-        <label className="block text-sm text-accent-light/60 mb-2">Mood</label>
-        <div className="flex gap-2">
+        <label className="block text-xs sm:text-sm text-accent-light/60 mb-1.5 sm:mb-2">Mood</label>
+        <div className="flex flex-wrap gap-2">
           {moods.map((mood) => (
             <button
               key={mood}
               onClick={() => setFormData({ ...formData, mood })}
-              className={`w-12 h-12 rounded-xl text-2xl transition-all ${
+              className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl text-xl sm:text-2xl transition-all ${
                 formData.mood === mood
                   ? 'bg-secondary scale-110 ring-2 ring-accent-orange'
                   : 'bg-primary-dark/50 hover:bg-secondary'
@@ -207,7 +207,7 @@ export default function DayEntryForm({ selectedDate, onDateChange, onSave }: Day
       </div>
 
       <div>
-        <label className="block text-sm text-accent-light/60 mb-2">
+        <label className="block text-xs sm:text-sm text-accent-light/60 mb-1.5 sm:mb-2">
           Productivity Score: <span className="text-accent-orange font-bold">{formData.productivityScore}</span>/10
         </label>
         <input
@@ -225,11 +225,11 @@ export default function DayEntryForm({ selectedDate, onDateChange, onSave }: Day
       </div>
 
       <div>
-        <label className="block text-sm text-accent-light/60 mb-2">Notes</label>
+        <label className="block text-xs sm:text-sm text-accent-light/60 mb-1.5 sm:mb-2">Notes</label>
         <textarea
           value={formData.notes || ''}
           onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-          className="input-field min-h-[120px] resize-none"
+          className="input-field min-h-[100px] sm:min-h-[120px] resize-none"
           placeholder="How was your day?"
         />
       </div>
@@ -237,7 +237,7 @@ export default function DayEntryForm({ selectedDate, onDateChange, onSave }: Day
       <button
         onClick={handleSave}
         disabled={isSaving}
-        className="btn-primary w-full flex items-center justify-center gap-2"
+        className="btn-primary w-full flex items-center justify-center gap-2 text-sm sm:text-base"
       >
         {isSaving ? (
           <Loader2 className="w-5 h-5 animate-spin" />

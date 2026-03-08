@@ -95,10 +95,10 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="space-y-8 animate-fadeIn">
+    <div className="space-y-5 sm:space-y-8 animate-fadeIn">
       <div>
-        <h1 className="text-3xl font-bold text-white mb-2">Dashboard</h1>
-        <p className="text-accent-light/60">Today&apos;s productivity summary</p>
+        <h1 className="text-2xl sm:text-3xl font-bold text-white mb-1.5 sm:mb-2">Dashboard</h1>
+        <p className="text-sm sm:text-base text-accent-light/60">Today&apos;s productivity summary</p>
       </div>
 
       <TaskAlertPanel
@@ -107,13 +107,13 @@ export default function Dashboard() {
         completedToday={completedTodayTasks}
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3 sm:gap-4">
         {metrics.map((metric, index) => (
           <MetricCard key={index} {...metric} />
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         <div className="lg:col-span-2">
           <ProductivityChart data={getWeekData()} />
         </div>
@@ -122,31 +122,31 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         <InsightsPanel insights={insights} />
         
-        <div className="glass-card p-6">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center">
-              <FileText className="w-5 h-5 text-white" />
+        <div className="glass-card p-4 sm:p-6">
+          <div className="flex items-center gap-3 mb-3 sm:mb-4">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center">
+              <FileText className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
             </div>
-            <h3 className="text-lg font-semibold text-white">Today&apos;s Notes</h3>
+            <h3 className="text-base sm:text-lg font-semibold text-white">Today&apos;s Notes</h3>
           </div>
           {todayData?.notes ? (
-            <p className="text-accent-light/80 line-clamp-4">{todayData.notes}</p>
+            <p className="text-sm sm:text-base text-accent-light/80 line-clamp-4">{todayData.notes}</p>
           ) : (
-            <p className="text-accent-light/60 text-center py-8">
+            <p className="text-sm sm:text-base text-accent-light/60 text-center py-6 sm:py-8">
               No notes for today. Start journaling!
             </p>
           )}
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="glass-card p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-white">Today&apos;s Tasks</h3>
-            <Link href="/todo" className="text-sm text-accent-orange hover:text-accent-red transition-colors">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+        <div className="glass-card p-4 sm:p-6">
+          <div className="flex items-center justify-between mb-3 sm:mb-4">
+            <h3 className="text-base sm:text-lg font-semibold text-white">Today&apos;s Tasks</h3>
+            <Link href="/todo" className="text-xs sm:text-sm text-accent-orange hover:text-accent-red transition-colors">
               View all
             </Link>
           </div>
@@ -156,12 +156,12 @@ export default function Dashboard() {
           ) : (
             <div className="space-y-3">
               {todaysTasks.slice(0, 5).map((task) => (
-                <div key={task.id} className="p-3 rounded-xl bg-primary-dark/40 border border-accent-light/10 flex items-center justify-between gap-3">
+                <div key={task.id} className="p-2.5 sm:p-3 rounded-xl bg-primary-dark/40 border border-accent-light/10 flex items-center justify-between gap-2.5 sm:gap-3">
                   <div className="min-w-0">
-                    <p className={`text-sm font-medium truncate ${task.completed ? 'text-accent-light/50 line-through' : 'text-white'}`}>
+                    <p className={`text-xs sm:text-sm font-medium truncate ${task.completed ? 'text-accent-light/50 line-through' : 'text-white'}`}>
                       {task.title}
                     </p>
-                    <p className="text-xs text-accent-light/60">{task.category} • {task.priority}</p>
+                    <p className="text-[11px] sm:text-xs text-accent-light/60">{task.category} • {task.priority}</p>
                   </div>
                   {task.completed ? (
                     <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0" />
@@ -174,10 +174,10 @@ export default function Dashboard() {
           )}
         </div>
 
-        <div className="glass-card p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-white">Recent Calendar Entries</h3>
-            <Link href="/calendar" className="text-sm text-accent-orange hover:text-accent-red transition-colors">
+        <div className="glass-card p-4 sm:p-6">
+          <div className="flex items-center justify-between mb-3 sm:mb-4">
+            <h3 className="text-base sm:text-lg font-semibold text-white">Recent Calendar Entries</h3>
+            <Link href="/calendar" className="text-xs sm:text-sm text-accent-orange hover:text-accent-red transition-colors">
               Open calendar
             </Link>
           </div>
@@ -192,15 +192,15 @@ export default function Dashboard() {
                 const totalDayTasks = tasks.filter((task) => task.plannedDate === day.date).length;
 
                 return (
-                  <div key={day.date} className="p-3 rounded-xl bg-primary-dark/40 border border-accent-light/10">
+                  <div key={day.date} className="p-2.5 sm:p-3 rounded-xl bg-primary-dark/40 border border-accent-light/10">
                     <div className="flex items-center justify-between gap-3">
-                      <p className="text-sm text-white font-medium">{new Date(day.date).toLocaleDateString()}</p>
+                      <p className="text-xs sm:text-sm text-white font-medium">{new Date(day.date).toLocaleDateString()}</p>
                       <div className="flex items-center gap-2">
-                        <span className="text-xs text-accent-light/70">Score {day.productivityScore}/10</span>
+                        <span className="text-[11px] sm:text-xs text-accent-light/70">Score {day.productivityScore}/10</span>
                         {isOverdueDay && <TriangleAlert className="w-4 h-4 text-red-400" />}
                       </div>
                     </div>
-                    <p className="text-xs text-accent-light/60 mt-1">
+                    <p className="text-[11px] sm:text-xs text-accent-light/60 mt-1">
                       Study {day.studyHours}h • Work {day.workHours}h • Coding {day.codingHours}h
                       {totalDayTasks > 0 ? ` • Tasks ${completedDayTasks}/${totalDayTasks}` : ''}
                     </p>
