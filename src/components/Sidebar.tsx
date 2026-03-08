@@ -11,7 +11,8 @@ import {
   FileText, 
   Timer,
   Sparkles,
-  CheckSquare
+  CheckSquare,
+  Wallet
 } from 'lucide-react';
 import { useAppStore } from '@/store/useAppStore';
 
@@ -20,6 +21,7 @@ const navItems = [
   { href: '/calendar', label: 'Calendar', icon: Calendar },
   { href: '/daily-tracker', label: 'Daily Tracker', icon: ClipboardList },
   { href: '/todo', label: 'Tasks', icon: CheckSquare },
+  { href: '/expenses', label: 'Expenses', icon: Wallet },
   { href: '/analytics', label: 'Analytics', icon: BarChart3 },
   { href: '/notes', label: 'Notes', icon: FileText },
   { href: '/focus', label: 'Focus Timer', icon: Timer },
