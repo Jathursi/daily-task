@@ -15,9 +15,11 @@ import {
   Wallet
 } from 'lucide-react';
 import { useAppStore } from '@/store/useAppStore';
+import LogoutButton from './LogoutButton';
+import { useAuth } from '@/context/AuthContext';
 
 const navItems = [
-  { href: '/', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/calendar', label: 'Calendar', icon: Calendar },
   { href: '/daily-tracker', label: 'Daily Tracker', icon: ClipboardList },
   { href: '/todo', label: 'Tasks', icon: CheckSquare },
@@ -34,12 +36,14 @@ interface SidebarProps {
 
 export default function Sidebar({ isMobileOpen = false, onClose }: SidebarProps) {
   const pathname = usePathname();
-  const userId = useAppStore((state) => state.userId);
-  const initUserId = useAppStore((state) => state.initUserId);
+  const { user } = useAuth();
+  const setUserId = useAppStore((state) => state.setUserId);
 
   useEffect(() => {
-    initUserId();
-  }, [initUserId]);
+    if (user) {
+      setUserId(user.uid);
+    }
+  }, [user, setUserId]);
 
   useEffect(() => {
     if (onClose) {
@@ -78,11 +82,14 @@ export default function Sidebar({ isMobileOpen = false, onClose }: SidebarProps)
         })}
       </nav>
 
-      <div className="p-4 border-t border-accent-light/10">
-        <div className="glass-card p-4">
-          <p className="text-xs text-accent-light/60 mb-1">Your ID</p>
-          <p className="text-sm text-accent-light truncate font-mono">{userId}</p>
-        </div>
+      <div className="p-4 border-t border-accent-light/10 space-y-2">
+        {user && (
+          <div className="glass-card p-3 mb-2">
+            <p className="text-xs text-accent-light/60 mb-1">Signed in as</p>
+            <p className="text-sm text-accent-light truncate font-mono">{user.email}</p>
+          </div>
+        )}
+        <LogoutButton />
       </div>
     </aside>
   );

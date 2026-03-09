@@ -43,7 +43,7 @@ export default function NotesPage() {
     if (!userId) return;
     setIsSaving(true);
     
-    await saveDayData({
+    await saveDayData(userId, {
       date: selectedDate,
       userId,
       studyHours: 0,

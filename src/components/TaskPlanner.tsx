@@ -65,15 +65,17 @@ export default function TaskPlanner({ userId, onSave, editingTask, onCancelEdit 
   };
 
   return (
-    <div className="glass-card p-4 sm:p-6">
+    <div className="rounded-2xl border border-accent-light/15 bg-primary-dark shadow-2xl p-4 sm:p-6">
       <div className="flex items-center justify-between mb-3 sm:mb-4">
         <h3 className="text-base sm:text-lg font-semibold text-white">
           {editingTask ? 'Edit Task' : 'Plan New Task'}
         </h3>
-        {editingTask && onCancelEdit && (
+        {onCancelEdit && (
           <button
+            type="button"
             onClick={onCancelEdit}
             className="p-2 rounded-lg hover:bg-accent-light/10 transition-colors"
+            aria-label="Close task planner"
           >
             <X className="w-5 h-5 text-accent-light" />
           </button>
@@ -103,7 +105,7 @@ export default function TaskPlanner({ userId, onSave, editingTask, onCancelEdit 
           />
         </div>
         
-        <div className="grid grid-cols-2 gap-3 sm:gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           <div>
             <label className="block text-xs sm:text-sm text-accent-light/60 mb-1.5 sm:mb-2">Category</label>
             <select
@@ -131,7 +133,7 @@ export default function TaskPlanner({ userId, onSave, editingTask, onCancelEdit 
           </div>
         </div>
         
-        <div className="grid grid-cols-2 gap-3 sm:gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           <div>
             <label className="block text-xs sm:text-sm text-accent-light/60 mb-1.5 sm:mb-2">Date</label>
             <input
@@ -154,19 +156,17 @@ export default function TaskPlanner({ userId, onSave, editingTask, onCancelEdit 
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-xs sm:text-sm text-accent-light/60 mb-1.5 sm:mb-2">Priority</label>
-            <select
-              value={formData.priority}
-              onChange={(e) => setFormData({ ...formData, priority: e.target.value as typeof formData.priority })}
-              className="input-field"
-            >
-              {priorities.map((p) => (
-                <option key={p} value={p}>{p}</option>
-              ))}
-            </select>
-          </div>
+        <div className="w-full sm:max-w-xs">
+          <label className="block text-xs sm:text-sm text-accent-light/60 mb-1.5 sm:mb-2">Priority</label>
+          <select
+            value={formData.priority}
+            onChange={(e) => setFormData({ ...formData, priority: e.target.value as typeof formData.priority })}
+            className="input-field"
+          >
+            {priorities.map((p) => (
+              <option key={p} value={p}>{p}</option>
+            ))}
+          </select>
         </div>
 
         {!editingTask && (

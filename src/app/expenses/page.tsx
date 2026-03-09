@@ -127,9 +127,9 @@ export default function ExpensesPage() {
     };
 
     if (editingId) {
-      await updateExpenseEntry(editingId, payload);
+      await updateExpenseEntry(userId, editingId, payload);
     } else {
-      await createExpenseEntry(payload);
+      await createExpenseEntry(userId, payload);
     }
 
     setForm(initialForm);
@@ -149,8 +149,8 @@ export default function ExpensesPage() {
   };
 
   const handleDelete = async (id?: string) => {
-    if (!id) return;
-    await deleteExpenseEntry(id);
+    if (!id || !userId) return;
+    await deleteExpenseEntry(userId, id);
   };
 
   if (isLoading) {

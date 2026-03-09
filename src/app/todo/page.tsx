@@ -36,12 +36,13 @@ export default function TodoPage() {
   }, [userId, setTasks]);
 
   const handleSaveTask = async (taskData: Omit<Task, 'id' | 'createdAt' | 'updatedAt'>) => {
+    if (!userId) return;
     if (editingTask) {
-      await updateTask(editingTask.id!, taskData);
+      await updateTask(userId, editingTask.id!, taskData);
       updateTaskInStore({ ...taskData, id: editingTask.id, userId });
       setEditingTask(null);
     } else {
-      const taskId = await createTask({ ...taskData, userId });
+      const taskId = await createTask(userId, { ...taskData, userId });
       const newTask: Task = { ...taskData, id: taskId, userId };
       addTask(newTask);
     }
@@ -49,8 +50,9 @@ export default function TodoPage() {
   };
 
   const handleToggleComplete = async (task: Task) => {
+    if (!userId) return;
     const newCompleted = !task.completed;
-    await toggleTaskComplete(task.id!, newCompleted);
+    await toggleTaskComplete(userId, task.id!, newCompleted);
     updateTaskInStore({ ...task, completed: newCompleted });
     
     if (!newCompleted && task.plannedDate < today) {
@@ -60,12 +62,14 @@ export default function TodoPage() {
   };
 
   const handleDeleteTask = async (taskId: string) => {
-    await deleteTask(taskId);
+    if (!userId) return;
+    await deleteTask(userId, taskId);
     removeTask(taskId);
   };
 
   const handleMoveToTomorrow = async (taskId: string) => {
-    await moveTaskToTomorrow(taskId);
+    if (!userId) return;
+    await moveTaskToTomorrow(userId, taskId);
     const task = tasks.find(t => t.id === taskId);
     if (task) {
       const tomorrow = new Date();
@@ -179,17 +183,30 @@ export default function TodoPage() {
       </div>
 
       {showPlanner && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
-          <div className="max-w-lg w-full max-h-[90vh] overflow-y-auto">
-            <TaskPlanner
-              userId={userId}
-              onSave={handleSaveTask}
-              editingTask={editingTask}
-              onCancelEdit={() => {
-                setEditingTask(null);
-                setShowPlanner(false);
-              }}
-            />
+        <div
+          className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm"
+          onClick={() => {
+            setEditingTask(null);
+            setShowPlanner(false);
+          }}
+        >
+          <div className="h-full w-full overflow-y-auto p-3 sm:p-6">
+            <div className="flex min-h-full items-start justify-center sm:items-center">
+            <div
+              className="w-full max-w-2xl my-3 sm:my-6"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <TaskPlanner
+                userId={userId}
+                onSave={handleSaveTask}
+                editingTask={editingTask}
+                onCancelEdit={() => {
+                  setEditingTask(null);
+                  setShowPlanner(false);
+                }}
+              />
+            </div>
+            </div>
           </div>
         </div>
       )}

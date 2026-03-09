@@ -1,5 +1,5 @@
 import { db } from '@/lib/firebase';
-import { equalTo, get, onValue, orderByChild, push, query, ref, remove, set, update } from 'firebase/database';
+import { get, onValue, push, ref, remove, set, update } from 'firebase/database';
 
 export type ExpenseType = 'income' | 'expense';
 
@@ -16,10 +16,8 @@ export interface ExpenseEntry {
   updatedAt?: string;
 }
 
-const EXPENSES_PATH = 'expenses';
-
-export const createExpenseEntry = async (entry: Omit<ExpenseEntry, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> => {
-  const expensesRef = ref(db, EXPENSES_PATH);
+export const createExpenseEntry = async (userId: string, entry: Omit<ExpenseEntry, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> => {
+  const expensesRef = ref(db, `users/${userId}/expenses`);
   const newRef = push(expensesRef);
   const expenseId = newRef.key;
 
@@ -29,6 +27,7 @@ export const createExpenseEntry = async (entry: Omit<ExpenseEntry, 'id' | 'creat
 
   const data: ExpenseEntry = {
     ...entry,
+    userId,
     id: expenseId,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -38,22 +37,22 @@ export const createExpenseEntry = async (entry: Omit<ExpenseEntry, 'id' | 'creat
   return expenseId;
 };
 
-export const updateExpenseEntry = async (expenseId: string, updates: Partial<ExpenseEntry>): Promise<void> => {
-  const expenseRef = ref(db, `${EXPENSES_PATH}/${expenseId}`);
+export const updateExpenseEntry = async (userId: string, expenseId: string, updates: Partial<ExpenseEntry>): Promise<void> => {
+  const expenseRef = ref(db, `users/${userId}/expenses/${expenseId}`);
   await update(expenseRef, {
     ...updates,
     updatedAt: new Date().toISOString(),
   });
 };
 
-export const deleteExpenseEntry = async (expenseId: string): Promise<void> => {
-  const expenseRef = ref(db, `${EXPENSES_PATH}/${expenseId}`);
+export const deleteExpenseEntry = async (userId: string, expenseId: string): Promise<void> => {
+  const expenseRef = ref(db, `users/${userId}/expenses/${expenseId}`);
   await remove(expenseRef);
 };
 
 export const getExpensesByUser = async (userId: string): Promise<ExpenseEntry[]> => {
-  const expensesQuery = query(ref(db, EXPENSES_PATH), orderByChild('userId'), equalTo(userId));
-  const snapshot = await get(expensesQuery);
+  const expensesRef = ref(db, `users/${userId}/expenses`);
+  const snapshot = await get(expensesRef);
 
   if (!snapshot.exists()) return [];
 
@@ -64,9 +63,9 @@ export const getExpensesByUser = async (userId: string): Promise<ExpenseEntry[]>
 };
 
 export const subscribeExpensesByUser = (userId: string, callback: (expenses: ExpenseEntry[]) => void): (() => void) => {
-  const expensesQuery = query(ref(db, EXPENSES_PATH), orderByChild('userId'), equalTo(userId));
+  const expensesRef = ref(db, `users/${userId}/expenses`);
 
-  return onValue(expensesQuery, (snapshot) => {
+  return onValue(expensesRef, (snapshot) => {
     if (!snapshot.exists()) {
       callback([]);
       return;

@@ -1,0 +1,54 @@
+{
+  "name": "SmartLife Tracker",
+  "short_name": "SmartLife",
+  "description": "AI Productivity Dashboard - Track your daily habits, study hours, work hours, mood, sleep, notes, and productivity insights",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1B1931",
+  "theme_color": "#1B1931",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-192-maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "categories": ["productivity", "lifestyle"],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "url": "/dashboard",
+      "description": "View your productivity dashboard"
+    },
+    {
+      "name": "Tasks",
+      "url": "/todo",
+      "description": "Manage your tasks"
+    },
+    {
+      "name": "Focus Timer",
+      "url": "/focus",
+      "description": "Start a focus session"
+    }
+  ]
+}

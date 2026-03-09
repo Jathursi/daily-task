@@ -1,11 +1,9 @@
 import { db } from '@/lib/firebase';
 import { Task } from '@/store/useAppStore';
-import { equalTo, get, onValue, orderByChild, push, query, ref, remove, set, update } from 'firebase/database';
+import { get, onValue, push, ref, remove, set, update } from 'firebase/database';
 
-const TASKS_PATH = 'tasks';
-
-export const createTask = async (task: Omit<Task, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> => {
-  const tasksRef = ref(db, TASKS_PATH);
+export const createTask = async (userId: string, task: Omit<Task, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> => {
+  const tasksRef = ref(db, `users/${userId}/tasks`);
   const newTaskRef = push(tasksRef);
   const taskId = newTaskRef.key;
 
@@ -15,6 +13,7 @@ export const createTask = async (task: Omit<Task, 'id' | 'createdAt' | 'updatedA
 
   const newTask: Task = {
     ...task,
+    userId,
     id: taskId,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -24,22 +23,22 @@ export const createTask = async (task: Omit<Task, 'id' | 'createdAt' | 'updatedA
   return taskId;
 };
 
-export const updateTask = async (taskId: string, updates: Partial<Task>): Promise<void> => {
-  const taskRef = ref(db, `${TASKS_PATH}/${taskId}`);
+export const updateTask = async (userId: string, taskId: string, updates: Partial<Task>): Promise<void> => {
+  const taskRef = ref(db, `users/${userId}/tasks/${taskId}`);
   await update(taskRef, {
     ...updates,
     updatedAt: new Date().toISOString(),
   });
 };
 
-export const deleteTask = async (taskId: string): Promise<void> => {
-  const taskRef = ref(db, `${TASKS_PATH}/${taskId}`);
+export const deleteTask = async (userId: string, taskId: string): Promise<void> => {
+  const taskRef = ref(db, `users/${userId}/tasks/${taskId}`);
   await remove(taskRef);
 };
 
 export const getTasksByUser = async (userId: string): Promise<Task[]> => {
-  const tasksQuery = query(ref(db, TASKS_PATH), orderByChild('userId'), equalTo(userId));
-  const snapshot = await get(tasksQuery);
+  const tasksRef = ref(db, `users/${userId}/tasks`);
+  const snapshot = await get(tasksRef);
 
   if (!snapshot.exists()) return [];
 
@@ -71,21 +70,21 @@ export const getUpcomingTasks = async (userId: string): Promise<Task[]> => {
   return tasks.filter((task) => task.plannedDate > today && !task.completed);
 };
 
-export const toggleTaskComplete = async (taskId: string, completed: boolean): Promise<void> => {
-  await updateTask(taskId, { completed });
+export const toggleTaskComplete = async (userId: string, taskId: string, completed: boolean): Promise<void> => {
+  await updateTask(userId, taskId, { completed });
 };
 
-export const moveTaskToTomorrow = async (taskId: string): Promise<void> => {
+export const moveTaskToTomorrow = async (userId: string, taskId: string): Promise<void> => {
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
   const tomorrowStr = tomorrow.toISOString().split('T')[0];
-  await updateTask(taskId, { plannedDate: tomorrowStr });
+  await updateTask(userId, taskId, { plannedDate: tomorrowStr });
 };
 
 export const subscribeTasksByUser = (userId: string, callback: (tasks: Task[]) => void): (() => void) => {
-  const tasksQuery = query(ref(db, TASKS_PATH), orderByChild('userId'), equalTo(userId));
+  const tasksRef = ref(db, `users/${userId}/tasks`);
 
-  return onValue(tasksQuery, (snapshot) => {
+  return onValue(tasksRef, (snapshot) => {
     if (!snapshot.exists()) {
       callback([]);
       return;

@@ -1,17 +1,37 @@
 'use client';
 
 import { useCallback, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { Menu, Sparkles } from 'lucide-react';
 import Sidebar from '@/components/Sidebar';
 import RealtimeAlertSystem from '@/components/RealtimeAlertSystem';
+import { useAuth } from '@/context/AuthContext';
 
 interface AppShellProps {
   children: React.ReactNode;
 }
 
+const authRoutes = ['/login', '/register'];
+
 export default function AppShell({ children }: AppShellProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const closeMobileMenu = useCallback(() => setIsMobileMenuOpen(false), []);
+  const pathname = usePathname();
+  const { loading } = useAuth();
+  
+  const isAuthRoute = authRoutes.includes(pathname);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-primary-dark">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-accent-orange"></div>
+      </div>
+    );
+  }
+
+  if (isAuthRoute) {
+    return <>{children}</>;
+  }
 
   return (
     <div className="flex min-h-screen overflow-x-hidden">

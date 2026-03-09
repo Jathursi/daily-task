@@ -71,7 +71,7 @@ export default function DayEntryForm({ selectedDate, onDateChange, onSave }: Day
       notes: formData.notes || '',
     };
     
-    await saveDayData(dayData);
+    await saveDayData(userId, dayData);
     const alreadyExists = daysData.some((day) => day.date === selectedDate);
     if (alreadyExists) {
       updateDayData(dayData);
