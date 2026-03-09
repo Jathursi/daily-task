@@ -8,6 +8,7 @@ interface TaskCardProps {
   onToggleComplete: (task: Task) => void;
   onEdit: (task: Task) => void;
   onDelete: (taskId: string) => void;
+  onViewDetails?: (task: Task) => void;
   isOverdue?: boolean;
   showDate?: boolean;
 }
@@ -34,7 +35,7 @@ const categoryColors = {
   Health: 'from-emerald-500 to-emerald-600',
 };
 
-export default function TaskCard({ task, onToggleComplete, onEdit, onDelete, isOverdue = false, showDate = false }: TaskCardProps) {
+export default function TaskCard({ task, onToggleComplete, onEdit, onDelete, onViewDetails, isOverdue = false, showDate = false }: TaskCardProps) {
   const CategoryIcon = categoryIcons[task.category];
   const today = new Date().toISOString().split('T')[0];
   const isToday = task.plannedDate === today;
@@ -45,7 +46,10 @@ export default function TaskCard({ task, onToggleComplete, onEdit, onDelete, isO
   };
 
   return (
-    <div className={`glass-card p-3 sm:p-4 transition-all overflow-hidden ${isOverdue ? 'border-red-500/50 bg-red-500/5' : ''}`}>
+    <div 
+      onClick={() => onViewDetails?.(task)}
+      className={`glass-card p-3 sm:p-4 transition-all overflow-hidden cursor-pointer hover:border-accent-orange/30 ${isOverdue ? 'border-red-500/50 bg-red-500/5' : ''}`}
+    >
       <div className="flex items-start gap-2.5 sm:gap-3">
         <button
           onClick={() => onToggleComplete(task)}

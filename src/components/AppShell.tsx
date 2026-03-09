@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { Menu, Sparkles } from 'lucide-react';
 import Sidebar from '@/components/Sidebar';
 import RealtimeAlertSystem from '@/components/RealtimeAlertSystem';
+import NotificationBell from '@/components/NotificationBell';
 import { useAuth } from '@/context/AuthContext';
 
 interface AppShellProps {
@@ -54,21 +55,21 @@ export default function AppShell({ children }: AppShellProps) {
       <div className="flex-1 lg:ml-[280px] min-w-0 overflow-x-hidden">
         <header className="fixed top-0 left-0 right-0 z-30 h-16 border-b border-accent-light/10 bg-primary-dark/95 backdrop-blur lg:hidden">
           <div className="h-full px-4 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-accent-orange to-accent-red flex items-center justify-center">
-                <Sparkles className="w-4 h-4 text-white" />
-              </div>
-              <span className="text-sm font-semibold text-white">SmartLife</span>
-            </div>
-
             <button
               type="button"
               aria-label="Open menu"
               onClick={() => setIsMobileMenuOpen(true)}
-              className="w-10 h-10 rounded-lg bg-secondary/50 hover:bg-secondary flex items-center justify-center transition-colors"
+              className="w-10 h-10 rounded-lg hover:bg-white/10 flex items-center justify-center transition-colors"
             >
               <Menu className="w-5 h-5 text-accent-light" />
             </button>
+
+            <div className="flex items-center gap-2">
+              <NotificationBell isMobile />
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-accent-orange to-accent-red flex items-center justify-center">
+                <Sparkles className="w-4 h-4 text-white" />
+              </div>
+            </div>
           </div>
         </header>
 

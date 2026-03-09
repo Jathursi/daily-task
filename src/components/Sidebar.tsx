@@ -12,14 +12,17 @@ import {
   Timer,
   Sparkles,
   CheckSquare,
-  Wallet
+  Wallet,
+  Target
 } from 'lucide-react';
 import { useAppStore } from '@/store/useAppStore';
 import LogoutButton from './LogoutButton';
 import { useAuth } from '@/context/AuthContext';
+import NotificationBell from './NotificationBell';
 
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/goals', label: 'Goals', icon: Target },
   { href: '/calendar', label: 'Calendar', icon: Calendar },
   { href: '/daily-tracker', label: 'Daily Tracker', icon: ClipboardList },
   { href: '/todo', label: 'Tasks', icon: CheckSquare },
@@ -58,14 +61,17 @@ export default function Sidebar({ isMobileOpen = false, onClose }: SidebarProps)
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-orange to-accent-red flex items-center justify-center">
             <Sparkles className="w-6 h-6 text-white" />
           </div>
-          <div>
+          <div className="flex-1">
             <h1 className="text-xl font-bold text-white">SmartLife</h1>
             <p className="text-xs text-accent-light/60">Productivity Tracker</p>
+          </div>
+          <div className="hidden lg:block">
+            <NotificationBell />
           </div>
         </div>
       </div>
 
-      <nav className="flex-1 p-4 space-y-1">
+      <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
           return (
@@ -84,7 +90,7 @@ export default function Sidebar({ isMobileOpen = false, onClose }: SidebarProps)
 
       <div className="p-4 border-t border-accent-light/10 space-y-2">
         {user && (
-          <div className="glass-card p-3 mb-2">
+          <div className="glass-card p-3">
             <p className="text-xs text-accent-light/60 mb-1">Signed in as</p>
             <p className="text-sm text-accent-light truncate font-mono">{user.email}</p>
           </div>

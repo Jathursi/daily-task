@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { useAppStore, Task } from '@/store/useAppStore';
 import { createTask, subscribeTasksByUser, toggleTaskComplete, deleteTask, moveTaskToTomorrow, updateTask } from '@/services/taskService';
 import TaskPlanner from '@/components/TaskPlanner';
@@ -8,11 +9,13 @@ import TaskAlertPanel from '@/components/TaskAlertPanel';
 import SmartCarryForward from '@/components/SmartCarryForward';
 import OverdueTaskAlert from '@/components/OverdueTaskAlert';
 import TaskList from '@/components/TaskList';
+import TaskDetailModal from '@/components/TaskDetailModal';
 import { Filter, Plus } from 'lucide-react';
 
 type FilterCategory = 'All' | 'Study' | 'Work' | 'Coding' | 'Personal' | 'Health';
 
 export default function TodoPage() {
+  const searchParams = useSearchParams();
   const { userId, tasks, setTasks, updateTask: updateTaskInStore, removeTask } = useAppStore();
   const [isLoading, setIsLoading] = useState(true);
   const [filterCategory, setFilterCategory] = useState<FilterCategory>('All');
@@ -20,8 +23,19 @@ export default function TodoPage() {
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [carryForwardTask, setCarryForwardTask] = useState<Task | null>(null);
   const [showCarryForward, setShowCarryForward] = useState(false);
+  const [viewingTask, setViewingTask] = useState<Task | null>(null);
 
   const today = new Date().toISOString().split('T')[0];
+
+  useEffect(() => {
+    const taskId = searchParams.get('taskId');
+    if (taskId && tasks.length > 0) {
+      const task = tasks.find(t => t.id === taskId);
+      if (task) {
+        setViewingTask(task);
+      }
+    }
+  }, [searchParams, tasks]);
 
   useEffect(() => {
     if (!userId) return;
@@ -101,6 +115,19 @@ export default function TodoPage() {
     setCarryForwardTask(null);
   };
 
+  const handleViewDetails = (task: Task) => {
+    setViewingTask(task);
+  };
+
+  const handleUpdateTask = async (taskId: string, updates: Partial<Task>) => {
+    if (!userId) return;
+    await updateTask(userId, taskId, updates);
+    const task = tasks.find(t => t.id === taskId);
+    if (task) {
+      updateTaskInStore({ ...task, ...updates });
+    }
+  };
+
   const todaysTasks = tasks.filter(t => t.plannedDate === today);
   const upcomingTasks = tasks.filter(t => t.plannedDate > today && !t.completed);
   const overdueTasks = tasks.filter(t => t.plannedDate < today && !t.completed);
@@ -175,6 +202,7 @@ export default function TodoPage() {
             setShowPlanner(true);
           }}
           onDelete={handleDeleteTask}
+          onViewDetails={handleViewDetails}
         />
 
         <TaskList
@@ -187,6 +215,7 @@ export default function TodoPage() {
             setShowPlanner(true);
           }}
           onDelete={handleDeleteTask}
+          onViewDetails={handleViewDetails}
         />
 
         <TaskList
@@ -199,6 +228,7 @@ export default function TodoPage() {
             setShowPlanner(true);
           }}
           onDelete={handleDeleteTask}
+          onViewDetails={handleViewDetails}
           isOverdue
         />
       </div>
@@ -211,10 +241,10 @@ export default function TodoPage() {
             setShowPlanner(false);
           }}
         >
-          <div className="h-full w-full overflow-y-auto p-3 sm:p-6">
-            <div className="flex min-h-full items-start justify-center sm:items-center">
+          <div className="h-screen w-full overflow-hidden p-3 sm:p-6">
+            <div className="mx-auto flex h-full items-start justify-center">
             <div
-              className="w-full max-w-2xl my-3 sm:my-6"
+              className="w-full max-w-2xl h-full sm:h-[calc(100vh-3rem)]"
               onClick={(e) => e.stopPropagation()}
             >
               <TaskPlanner
@@ -241,6 +271,14 @@ export default function TodoPage() {
             setShowCarryForward(false);
             setCarryForwardTask(null);
           }}
+        />
+      )}
+
+      {viewingTask && (
+        <TaskDetailModal
+          task={viewingTask}
+          onClose={() => setViewingTask(null)}
+          onUpdate={handleUpdateTask}
         />
       )}
     </div>

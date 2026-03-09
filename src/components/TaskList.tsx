@@ -10,6 +10,7 @@ interface TaskListProps {
   onToggleComplete: (task: Task) => void;
   onEdit: (task: Task) => void;
   onDelete: (taskId: string) => void;
+  onViewDetails?: (task: Task) => void;
   isOverdue?: boolean;
 }
 
@@ -20,6 +21,7 @@ export default function TaskList({
   onToggleComplete,
   onEdit,
   onDelete,
+  onViewDetails,
   isOverdue = false,
 }: TaskListProps) {
   return (
@@ -42,6 +44,7 @@ export default function TaskList({
               onToggleComplete={onToggleComplete}
               onEdit={onEdit}
               onDelete={onDelete}
+              onViewDetails={onViewDetails}
               isOverdue={isOverdue}
               showDate
             />

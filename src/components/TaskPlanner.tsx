@@ -79,7 +79,7 @@ export default function TaskPlanner({ userId, onSave, editingTask, onCancelEdit 
   };
 
   return (
-    <div className="bg-gradient-to-br from-primary-dark via-secondary/40 to-primary-dark rounded-2xl border border-accent-light/10 shadow-2xl overflow-hidden">
+    <div className="h-full bg-gradient-to-br from-primary-dark via-secondary/40 to-primary-dark rounded-2xl border border-accent-light/10 shadow-2xl overflow-hidden flex flex-col">
       <div className="relative bg-gradient-to-r from-accent-orange/20 to-accent-red/20 p-4 sm:p-6 border-b border-accent-light/10">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -106,7 +106,7 @@ export default function TaskPlanner({ userId, onSave, editingTask, onCancelEdit 
         </div>
       </div>
       
-      <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-5">
+      <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-5">
         <div className="space-y-1">
           <label className="text-xs font-medium text-accent-light/70 flex items-center gap-2">
             <BookOpen className="w-3.5 h-3.5" />
