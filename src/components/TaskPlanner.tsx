@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Task } from '@/store/useAppStore';
-import { X, Plus, Loader2, Repeat } from 'lucide-react';
+import { X, Plus, Loader2, Repeat, Calendar, Clock, Flag, BookOpen } from 'lucide-react';
 
 interface TaskPlannerProps {
   userId: string;
@@ -13,6 +13,20 @@ interface TaskPlannerProps {
 
 const categories = ['Study', 'Work', 'Coding', 'Personal', 'Health'] as const;
 const priorities = ['Low', 'Medium', 'High'] as const;
+
+const categoryColors: Record<string, string> = {
+  Study: 'from-blue-500 to-blue-600',
+  Work: 'from-purple-500 to-purple-600',
+  Coding: 'from-green-500 to-green-600',
+  Personal: 'from-pink-500 to-pink-600',
+  Health: 'from-red-500 to-red-600',
+};
+
+const priorityColors: Record<string, { bg: string; text: string; border: string }> = {
+  Low: { bg: 'bg-green-500/20', text: 'text-green-400', border: 'border-green-500/30' },
+  Medium: { bg: 'bg-yellow-500/20', text: 'text-yellow-400', border: 'border-yellow-500/30' },
+  High: { bg: 'bg-red-500/20', text: 'text-red-400', border: 'border-red-500/30' },
+};
 
 export default function TaskPlanner({ userId, onSave, editingTask, onCancelEdit }: TaskPlannerProps) {
   const [isSaving, setIsSaving] = useState(false);
@@ -65,62 +79,85 @@ export default function TaskPlanner({ userId, onSave, editingTask, onCancelEdit 
   };
 
   return (
-    <div className="rounded-2xl border border-accent-light/15 bg-primary-dark shadow-2xl p-4 sm:p-6">
-      <div className="flex items-center justify-between mb-3 sm:mb-4">
-        <h3 className="text-base sm:text-lg font-semibold text-white">
-          {editingTask ? 'Edit Task' : 'Plan New Task'}
-        </h3>
-        {onCancelEdit && (
-          <button
-            type="button"
-            onClick={onCancelEdit}
-            className="p-2 rounded-lg hover:bg-accent-light/10 transition-colors"
-            aria-label="Close task planner"
-          >
-            <X className="w-5 h-5 text-accent-light" />
-          </button>
-        )}
+    <div className="bg-gradient-to-br from-primary-dark via-secondary/40 to-primary-dark rounded-2xl border border-accent-light/10 shadow-2xl overflow-hidden">
+      <div className="relative bg-gradient-to-r from-accent-orange/20 to-accent-red/20 p-4 sm:p-6 border-b border-accent-light/10">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-orange to-accent-red flex items-center justify-center">
+              <Plus className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <h3 className="text-lg font-bold text-white">
+                {editingTask ? 'Edit Task' : 'New Task'}
+              </h3>
+              <p className="text-xs text-accent-light/60">Plan your productivity</p>
+            </div>
+          </div>
+          {onCancelEdit && (
+            <button
+              type="button"
+              onClick={onCancelEdit}
+              className="p-2 rounded-lg hover:bg-white/10 transition-colors"
+              aria-label="Close"
+            >
+              <X className="w-5 h-5 text-accent-light" />
+            </button>
+          )}
+        </div>
       </div>
       
-      <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
-        <div>
-          <label className="block text-xs sm:text-sm text-accent-light/60 mb-1.5 sm:mb-2">Task Title</label>
+      <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-5">
+        <div className="space-y-1">
+          <label className="text-xs font-medium text-accent-light/70 flex items-center gap-2">
+            <BookOpen className="w-3.5 h-3.5" />
+            Task Title
+          </label>
           <input
             type="text"
             value={formData.title}
             onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-            className="input-field"
+            className="w-full bg-primary-dark/60 border border-accent-light/20 rounded-xl px-4 py-3 text-white placeholder-accent-light/40 focus:outline-none focus:border-accent-orange/50 focus:ring-2 focus:ring-accent-orange/10 transition-all"
             placeholder="What do you need to do?"
             required
+            autoFocus
           />
         </div>
         
-        <div>
-          <label className="block text-xs sm:text-sm text-accent-light/60 mb-1.5 sm:mb-2">Description (optional)</label>
+        <div className="space-y-1">
+          <label className="text-xs font-medium text-accent-light/70">Description (optional)</label>
           <textarea
             value={formData.description}
             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-            className="input-field min-h-[80px] resize-none"
+            className="w-full bg-primary-dark/60 border border-accent-light/20 rounded-xl px-4 py-3 text-white placeholder-accent-light/40 focus:outline-none focus:border-accent-orange/50 focus:ring-2 focus:ring-accent-orange/10 transition-all resize-none min-h-[80px]"
             placeholder="Add more details..."
           />
         </div>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-          <div>
-            <label className="block text-xs sm:text-sm text-accent-light/60 mb-1.5 sm:mb-2">Category</label>
-            <select
-              value={formData.category}
-              onChange={(e) => setFormData({ ...formData, category: e.target.value as typeof formData.category })}
-              className="input-field"
-            >
-              {categories.map((cat) => (
-                <option key={cat} value={cat}>{cat}</option>
-              ))}
-            </select>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-1">
+            <label className="text-xs font-medium text-accent-light/70 flex items-center gap-2">
+              <BookOpen className="w-3.5 h-3.5" />
+              Category
+            </label>
+            <div className="relative">
+              <select
+                value={formData.category}
+                onChange={(e) => setFormData({ ...formData, category: e.target.value as typeof formData.category })}
+                className="w-full appearance-none bg-primary-dark/60 border border-accent-light/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-accent-orange/50 focus:ring-2 focus:ring-accent-orange/10 transition-all"
+              >
+                {categories.map((cat) => (
+                  <option key={cat} value={cat} className="bg-primary-dark">{cat}</option>
+                ))}
+              </select>
+              <div className={`absolute right-3 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-gradient-to-br ${categoryColors[formData.category]}`} />
+            </div>
           </div>
           
-          <div>
-            <label className="block text-xs sm:text-sm text-accent-light/60 mb-1.5 sm:mb-2">Planned Hours</label>
+          <div className="space-y-1">
+            <label className="text-xs font-medium text-accent-light/70 flex items-center gap-2">
+              <Clock className="w-3.5 h-3.5" />
+              Hours
+            </label>
             <input
               type="number"
               min="0.5"
@@ -128,63 +165,79 @@ export default function TaskPlanner({ userId, onSave, editingTask, onCancelEdit 
               step="0.5"
               value={formData.plannedHours}
               onChange={(e) => setFormData({ ...formData, plannedHours: Number(e.target.value) })}
-              className="input-field"
+              className="w-full bg-primary-dark/60 border border-accent-light/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-accent-orange/50 focus:ring-2 focus:ring-accent-orange/10 transition-all"
             />
           </div>
         </div>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-          <div>
-            <label className="block text-xs sm:text-sm text-accent-light/60 mb-1.5 sm:mb-2">Date</label>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-1">
+            <label className="text-xs font-medium text-accent-light/70 flex items-center gap-2">
+              <Calendar className="w-3.5 h-3.5" />
+              Date
+            </label>
             <input
               type="date"
               value={formData.plannedDate}
               onChange={(e) => setFormData({ ...formData, plannedDate: e.target.value })}
-              className="input-field"
+              className="w-full bg-primary-dark/60 border border-accent-light/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-accent-orange/50 focus:ring-2 focus:ring-accent-orange/10 transition-all"
               required
             />
           </div>
           
-          <div>
-            <label className="block text-xs sm:text-sm text-accent-light/60 mb-1.5 sm:mb-2">Time (optional)</label>
+          <div className="space-y-1">
+            <label className="text-xs font-medium text-accent-light/70 flex items-center gap-2">
+              <Clock className="w-3.5 h-3.5" />
+              Time
+            </label>
             <input
               type="time"
               value={formData.plannedTime || ''}
               onChange={(e) => setFormData({ ...formData, plannedTime: e.target.value })}
-              className="input-field"
+              className="w-full bg-primary-dark/60 border border-accent-light/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-accent-orange/50 focus:ring-2 focus:ring-accent-orange/10 transition-all"
             />
           </div>
         </div>
 
-        <div className="w-full sm:max-w-xs">
-          <label className="block text-xs sm:text-sm text-accent-light/60 mb-1.5 sm:mb-2">Priority</label>
-          <select
-            value={formData.priority}
-            onChange={(e) => setFormData({ ...formData, priority: e.target.value as typeof formData.priority })}
-            className="input-field"
-          >
+        <div className="space-y-1">
+          <label className="text-xs font-medium text-accent-light/70 flex items-center gap-2">
+            <Flag className="w-3.5 h-3.5" />
+            Priority
+          </label>
+          <div className="flex gap-2">
             {priorities.map((p) => (
-              <option key={p} value={p}>{p}</option>
+              <button
+                key={p}
+                type="button"
+                onClick={() => setFormData({ ...formData, priority: p })}
+                className={`flex-1 py-2.5 px-3 rounded-xl border text-sm font-medium transition-all ${
+                  formData.priority === p
+                    ? `${priorityColors[p].bg} ${priorityColors[p].text} ${priorityColors[p].border}`
+                    : 'bg-primary-dark/40 border-accent-light/10 text-accent-light/60 hover:bg-primary-dark/60'
+                }`}
+              >
+                {p}
+              </button>
             ))}
-          </select>
+          </div>
         </div>
 
         {!editingTask && (
-          <div className="p-3 sm:p-4 rounded-xl bg-secondary/30 border border-accent-light/10">
+          <div className="p-4 rounded-xl bg-gradient-to-r from-secondary/30 to-primary-dark/30 border border-accent-light/10">
             <div className="flex items-center gap-2 mb-3">
               <Repeat className="w-4 h-4 text-accent-orange" />
-              <span className="text-xs sm:text-sm font-medium text-white">Repeat</span>
+              <span className="text-sm font-medium text-white">Repeat</span>
             </div>
             <div className="flex gap-2 flex-wrap">
-              {[1, 2, 3, 4, 5, 7].map((days) => (
+              {[1, 2, 3, 5, 7].map((days) => (
                 <button
                   key={days}
                   type="button"
                   onClick={() => setRepeatDays(days)}
-                  className={`px-2.5 sm:px-3 py-1.5 rounded-lg text-xs sm:text-sm transition-all ${
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                     repeatDays === days
-                      ? 'bg-accent-orange text-white'
-                      : 'bg-primary-dark/50 text-accent-light hover:bg-secondary'
+                      ? 'bg-gradient-to-r from-accent-orange to-accent-red text-white'
+                      : 'bg-primary-dark/50 text-accent-light hover:bg-secondary/50'
                   }`}
                 >
                   {days === 1 ? '1 day' : days === 7 ? '1 week' : `${days} days`}
@@ -193,7 +246,7 @@ export default function TaskPlanner({ userId, onSave, editingTask, onCancelEdit 
             </div>
             {repeatDays > 1 && (
               <p className="text-xs text-accent-light/60 mt-2">
-                This task will be added for {repeatDays} consecutive days starting from {new Date(formData.plannedDate).toLocaleDateString()}
+                Will create {repeatDays} tasks starting from {new Date(formData.plannedDate).toLocaleDateString()}
               </p>
             )}
           </div>
@@ -202,7 +255,7 @@ export default function TaskPlanner({ userId, onSave, editingTask, onCancelEdit 
         <button
           type="submit"
           disabled={isSaving || !formData.title.trim()}
-          className="btn-primary w-full flex items-center justify-center gap-2 text-sm sm:text-base"
+          className="w-full py-3.5 px-6 bg-gradient-to-r from-accent-orange to-accent-red rounded-xl text-white font-semibold hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg shadow-accent-orange/20"
         >
           {isSaving ? (
             <Loader2 className="w-5 h-5 animate-spin" />

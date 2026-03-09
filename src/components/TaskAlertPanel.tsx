@@ -9,7 +9,7 @@ interface TaskAlertPanelProps {
 }
 
 export default function TaskAlertPanel({ overdueCount, todayCount, completedToday }: TaskAlertPanelProps) {
-  const allCompletedYesterday = overdueCount === 0 && completedToday > 0;
+  const allCompletedToday = todayCount > 0 && completedToday === todayCount;
   
   return (
     <div className="glass-card p-4 sm:p-6">
@@ -30,11 +30,11 @@ export default function TaskAlertPanel({ overdueCount, todayCount, completedToda
           </div>
         )}
         
-        {overdueCount === 0 && completedToday > 0 && allCompletedYesterday && (
+        {overdueCount === 0 && allCompletedToday && (
           <div className="p-3 sm:p-4 rounded-xl bg-green-500/10 border border-green-500/30 flex items-start gap-2.5 sm:gap-3">
             <Flame className="w-4 h-4 sm:w-5 sm:h-5 text-green-400 flex-shrink-0 mt-0.5" />
             <div>
-              <p className="text-sm sm:text-base text-green-400 font-medium">All tasks completed yesterday!</p>
+              <p className="text-sm sm:text-base text-green-400 font-medium">All tasks completed today!</p>
               <p className="text-xs sm:text-sm text-green-400/70 mt-1">
                 Great job! Keep up the momentum.
               </p>

@@ -16,13 +16,9 @@ interface AlertItem {
 const isOverdue = (task: Task, today: string) => task.plannedDate < today && !task.completed;
 
 export default function RealtimeAlertSystem() {
-  const { userId, initUserId } = useAppStore();
+  const { userId } = useAppStore();
   const [alerts, setAlerts] = useState<AlertItem[]>([]);
   const previousTasksRef = useRef<Record<string, Task>>({});
-
-  useEffect(() => {
-    initUserId();
-  }, [initUserId]);
 
   useEffect(() => {
     if (!userId) return;

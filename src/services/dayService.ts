@@ -64,6 +64,9 @@ export const subscribeDaysData = (userId: string, callback: (days: DayData[]) =>
       .sort((a, b) => b.date.localeCompare(a.date));
 
     callback(days);
+  }, (error) => {
+    console.error('Error subscribing to days data:', error);
+    callback([]);
   });
 };
 
@@ -77,5 +80,8 @@ export const subscribeDayData = (userId: string, date: string, callback: (day: D
     } else {
       callback(null);
     }
+  }, (error) => {
+    console.error('Error subscribing to day data:', error);
+    callback(null);
   });
 };

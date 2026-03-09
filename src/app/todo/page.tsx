@@ -13,7 +13,7 @@ import { Filter, Plus } from 'lucide-react';
 type FilterCategory = 'All' | 'Study' | 'Work' | 'Coding' | 'Personal' | 'Health';
 
 export default function TodoPage() {
-  const { userId, tasks, setTasks, addTask, updateTask: updateTaskInStore, removeTask } = useAppStore();
+  const { userId, tasks, setTasks, updateTask: updateTaskInStore, removeTask } = useAppStore();
   const [isLoading, setIsLoading] = useState(true);
   const [filterCategory, setFilterCategory] = useState<FilterCategory>('All');
   const [showPlanner, setShowPlanner] = useState(false);
@@ -42,9 +42,7 @@ export default function TodoPage() {
       updateTaskInStore({ ...taskData, id: editingTask.id, userId });
       setEditingTask(null);
     } else {
-      const taskId = await createTask(userId, { ...taskData, userId });
-      const newTask: Task = { ...taskData, id: taskId, userId };
-      addTask(newTask);
+      await createTask(userId, { ...taskData, userId });
     }
     setShowPlanner(false);
   };
@@ -54,6 +52,29 @@ export default function TodoPage() {
     const newCompleted = !task.completed;
     await toggleTaskComplete(userId, task.id!, newCompleted);
     updateTaskInStore({ ...task, completed: newCompleted });
+    
+    if (newCompleted && task.category === 'Study') {
+      const addReviewTask = (daysFromNow: number) => {
+        const reviewDate = new Date();
+        reviewDate.setDate(reviewDate.getDate() + daysFromNow);
+        const dateStr = reviewDate.toISOString().split('T')[0];
+        
+        createTask(userId, {
+          title: task.title,
+          description: task.description || '',
+          category: task.category,
+          plannedDate: dateStr,
+          plannedTime: task.plannedTime || '',
+          plannedHours: task.plannedHours,
+          priority: task.priority,
+          completed: false,
+          userId: userId,
+        });
+      };
+      
+      addReviewTask(4);
+      addReviewTask(7);
+    }
     
     if (!newCompleted && task.plannedDate < today) {
       setCarryForwardTask(task);

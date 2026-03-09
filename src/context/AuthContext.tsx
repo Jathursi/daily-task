@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useState, ReactNode } from 'react
 import { User, onAuthStateChanged, signOut as firebaseSignOut } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { useRouter, usePathname } from 'next/navigation';
+import { useAppStore } from '@/store/useAppStore';
 
 interface AuthContextType {
   user: User | null;
@@ -20,15 +21,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const pathname = usePathname();
+  const setUserId = useAppStore((state) => state.setUserId);
+  const setTasks = useAppStore((state) => state.setTasks);
+  const setDaysData = useAppStore((state) => state.setDaysData);
+  const setSelectedDay = useAppStore((state) => state.setSelectedDay);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
+
+      // Keep all app data strictly bound to authenticated Firebase UID.
+      if (user) {
+        setUserId(user.uid);
+      } else {
+        setUserId('');
+        setTasks([]);
+        setDaysData([]);
+        setSelectedDay(null);
+      }
+
       setLoading(false);
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [setDaysData, setSelectedDay, setTasks, setUserId]);
 
   useEffect(() => {
     if (!loading) {
